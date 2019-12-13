@@ -2,17 +2,17 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/stat.h>
-#include <sys/sysmacros.h>
+//#include <sys/sysmacros.h>
 #include <sys/types.h>
 #include <time.h>
 #include <pwd.h>
 #include <grp.h>
 
-void printFileType(__mode_t);
-void printPerms(__mode_t);
-void printUserOwner(__uid_t);
-void printGroupOwner(__gid_t _gid);
-void printSize(__off_t _size);
+void printFileType(pid_t);
+void printPerms(pid_t);
+void printUserOwner(pid_t);
+void printGroupOwner(pid_t);
+void printSize(pid_t);
 
 int main(void)
 {
@@ -56,7 +56,7 @@ int main(void)
     exit(EXIT_SUCCESS);
 }
 
-void printFileType(__mode_t _mode)
+void printFileType(pid_t _mode)
 {
             switch (_mode & S_IFMT)
             {
@@ -87,7 +87,7 @@ void printFileType(__mode_t _mode)
             }
 }
 
-void printPerms(__mode_t _mode)
+void printPerms(pid_t _mode)
 {
     if(_mode & 0400)
         printf("r");
@@ -127,21 +127,21 @@ void printPerms(__mode_t _mode)
         printf("-");
 }
 
-void printUserOwner(__uid_t _uid)
+void printUserOwner(pid_t _uid)
 {
     struct passwd *pws;
     pws = getpwuid(_uid);
     printf("%s", pws->pw_name);
 }
 
-void printGroupOwner(__gid_t _gid)
+void printGroupOwner(pid_t _gid)
 {
     struct group *gp;
     gp = getgrgid(_gid);
     printf("%s", gp->gr_name);
 }
 
-void printSize(__off_t _size)
+void printSize(pid_t _size)
 {
-    printf("%5ld", _size);
+    printf("%5d", _size);
 }

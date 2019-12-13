@@ -26,6 +26,7 @@ switch(pid=fork()) {
         scanf("%d",&rv);
         printf(" CHILD: Выход!\n");
         atexit(print);
+        break;
     default:
         printf("PARENT: Это процесс-родитель!\n");
         printf("PARENT: Мой PID -- %d\n", getpid());
@@ -36,6 +37,7 @@ switch(pid=fork()) {
         printf("PARENT: Выход!\n");
         atexit(print);
         exit(rv);
+        break;
     }
     atexit(print);
 }
