@@ -19,7 +19,7 @@ int main()
         return 1;
     }
 
-     __pid_t child_pid;
+    pid_t child_pid;
     if((child_pid = fork()) != 0)
     {
         // Parent pid
