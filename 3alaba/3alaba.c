@@ -4,12 +4,29 @@
 #include <sys/wait.h>
 #include <stdlib.h>
 #include <time.h>
+#include <string.h>
+
+char *settime(struct tm *u)
+{
+  char s[40];
+  char *tmp;
+  for (int i = 0; i<40; i++) s[i] = 0;
+  int length = strftime(s, 40, "%d.%m.%Y %H:%M:%S, %A", u);
+  tmp = (char*)malloc(sizeof(s));
+  strcpy(tmp, s);
+  return(tmp);
+}
+
 
 int main()
 {
+    struct tm *u;
+    char *f;
     time_t lt;
     lt = time(NULL);
-    printf("Time = %ld\n", lt);
+    u = localtime(&lt);
+    f = settime(u);
+    printf("Time = %s\n", f);
     sleep(1); 
 
     int time_pipe[2];
@@ -27,7 +44,9 @@ int main()
         printf("\tPPID: %d\n\tPID: %d\n",getppid(), getpid());
         lt = time(NULL); // Update time
         write(time_pipe[1], &lt, sizeof(time_t));
-        printf("\tWritten time is %ld\n", lt);
+        u = localtime(&lt);
+        f = settime(u);
+        printf("\tWritten time is %s\n", f);
         int res = 0;
         sleep(1);
         waitpid(child_pid, &res, 0);
@@ -37,12 +56,18 @@ int main()
         // child pid
         printf("It's child process\n");
         printf("\tPPID: %d\n\tPID: %d\n",getppid(), getpid());
-        printf("\tBase time was %ld\n", lt);
+        u = localtime(&lt);
+        f = settime(u);
+        printf("\tBase time was %s\n", f);
         read(time_pipe[0], &lt, sizeof(time_t));
-        printf("\tRead time is %ld\n", lt);
+        u = localtime(&lt);
+        f = settime(u);
+        printf("\tReat time is %s\n", f);
         sleep(1);
         lt = time(NULL);
-        printf("\tNow time is %ld\n", lt);
+        u = localtime(&lt);
+        f = settime(u);
+        printf("\tNow time is %s\n", f);
     }
     return 0;
 }
