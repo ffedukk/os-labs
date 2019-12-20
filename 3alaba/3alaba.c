@@ -26,7 +26,7 @@ int main()
     lt = time(NULL);
     u = localtime(&lt);
     f = settime(u);
-    printf("Time = %s\n", f);
+    printf("Initial time is %s\n", f);
     sleep(1); 
 
     int time_pipe[2];
@@ -39,35 +39,33 @@ int main()
     pid_t child_pid;
     if((child_pid = fork()) != 0)
     {
-        // Parent pid
+        // Parent
         printf("It's parent process\n");
-        printf("\tPPID: %d\n\tPID: %d\n",getppid(), getpid());
         lt = time(NULL); // Update time
         write(time_pipe[1], &lt, sizeof(time_t));
         u = localtime(&lt);
         f = settime(u);
-        printf("\tWritten time is %s\n", f);
+        printf("Written time is %s\n", f);
         int res = 0;
         sleep(1);
         waitpid(child_pid, &res, 0);
     }
     else
     {
-        // child pid
+        // Child 
         printf("It's child process\n");
-        printf("\tPPID: %d\n\tPID: %d\n",getppid(), getpid());
         u = localtime(&lt);
         f = settime(u);
-        printf("\tBase time was %s\n", f);
+        printf("Initial time : %s\n", f);
         read(time_pipe[0], &lt, sizeof(time_t));
         u = localtime(&lt);
         f = settime(u);
-        printf("\tReat time is %s\n", f);
+        printf("Read time : %s\n", f);
         sleep(1);
         lt = time(NULL);
         u = localtime(&lt);
         f = settime(u);
-        printf("\tNow time is %s\n", f);
+        printf("Now time : %s\n", f);
     }
     return 0;
 }
