@@ -53,8 +53,8 @@ int main()
         if(fifo_fd == -1)
         {
             printf("Can't open FIFO %x\n", fifo_fd);
-            int res = 0;
-            waitpid(child_pid,&res,0);
+            kill(child_pid, SIGINT);
+            waitpid(child_pid, NULL, 0);
             unlink(FIFO_PATH);
             exit(1);
         }
