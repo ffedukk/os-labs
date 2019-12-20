@@ -9,6 +9,7 @@
 #include <string.h>
 
 #define FIFO_PATH "/tmp/time_fifo"
+#define DATASIZE_TIME sizeof(time_t)
 
 char * settime(struct tm *u)
 {
@@ -78,7 +79,7 @@ int main()
             printf("Can't open FIFO %x\n", fifo_fd);            
             exit(1);
         }
-        read(fifo_fd, &lt, sizeof(time_t));
+        read(fifo_fd, &lt, DATASIZE_TIME);
         close(fifo_fd);
         u = localtime(&lt);
         f = settime(u);
