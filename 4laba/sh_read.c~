@@ -40,6 +40,8 @@ int main()
     sh_value* value = (sh_value*) shmat(shmid,(void*)0,0);
     while(1)
     {
+        
+        //sh_value* value = (sh_value*) shmat(shmid,(void*)0,0); 
         if(value == (sh_value*)-1)
         {
             printf("shmat errno:%d\n", errno);
@@ -50,6 +52,12 @@ int main()
     
         printf("Data read from memory: %d %s\n", value->pid, value->str); 
         
+        
+        //if(shmdt(value) != 0)
+        //{
+        //    printf("shmdt errno:%d\n", errno);
+        //    return 1;
+        //}
         sleep(1);
     }
     if(shmdt(value) != 0)
